@@ -24,7 +24,6 @@ const invitationData = {
   event: {
     displayDate: "Minggu, 12 Oktober 2026",
     venueShort: "Grand Ambarukmo, Yogyakarta",
-    venueFull: "Ballroom Grand Ambarukmo, Yogyakarta",
     address: "Jl. Laksda Adisucipto No.80, Sleman, Daerah Istimewa Yogyakarta",
     akad: {
       date: "Minggu, 12 Oktober 2026",
@@ -120,7 +119,6 @@ const elements = {
   volumeFloat: document.getElementById("volumeFloat"),
   volumeFloatButton: document.getElementById("volumeFloatButton"),
   volumeFloatIcon: document.getElementById("volumeFloatIcon"),
-  volumeIconPath: document.getElementById("volumeIconPath"),
   volumeWaveSmall: document.getElementById("volumeWaveSmall"),
   volumeWaveLarge: document.getElementById("volumeWaveLarge"),
   volumeMuteLine: document.getElementById("volumeMuteLine"),
@@ -176,7 +174,7 @@ function applyVolumeLevel() {
     audioElement.volume = currentVolume;
   }
 
-  if (!elements.volumeSlider || !elements.volumeIconPath) {
+  if (!elements.volumeSlider || !elements.volumeFloatIcon) {
     return;
   }
 
