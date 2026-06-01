@@ -1,5 +1,5 @@
 const invitationData = {
-  seoTitle: "Undangan Pernikahan Connie Wahyu Wijayanti, S.Kep., Ns. & Agi Yoko Priyambodo, S.Kom.",
+  seoTitle: "Undangan Pernikahan Connie Wahyu Wijayanti & Agi Yoko Priyambodo",
   heroMessage: "Dengan penuh rasa syukur, kami mengundang Anda untuk hadir pada hari bahagia kami.",
   quote:
     "\"Dan di antara tanda-tanda kekuasaan-Nya diciptakan-Nya untukmu pasangan hidup supaya kamu cenderung dan merasa tenteram kepadanya.\"",
@@ -8,16 +8,16 @@ const invitationData = {
   closingMessage:
     "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.",
   couple: {
-    shortNames: "Connie Wahyu Wijayanti, S.Kep., Ns. & Agi Yoko Priyambodo, S.Kom.",
+    shortNames: "Connie Wahyu Wijayanti & Agi Yoko Priyambodo",
     summaryNames: "Connie & Agi",
     introNames: "Connie & Agi",
     image: "assets/images/Edit-2907.jpg",
     bride: {
-      name: "Connie Wahyu Wijayanti, S.Kep., Ns.",
+      name: "Connie Wahyu Wijayanti",
       parents: "Putri pertama dari Bapak Basuki & Ibu Widya",
     },
     groom: {
-      name: "Agi Yoko Priyambodo, S.Kom.",
+      name: "Agi Yoko Priyambodo",
       parents: "Putra kedua dari Bapak Supriyana & Ibu Dwi Yani",
     },
   },
@@ -74,12 +74,28 @@ const invitationData = {
       image: "assets/images/Edit-4404.jpg",
     },
   ],
+  gift: {
+    intro:
+      "Doa restu Anda adalah hadiah terbaik. Namun jika ingin berbagi tanda kasih, bisa melalui rekening berikut.",
+    accounts: [
+      {
+        bank: "BCA",
+        number: "1234567890",
+        name: "Connie Wahyu Wijayanti",
+      },
+      {
+        bank: "BRI",
+        number: "0987654321",
+        name: "Agi Yoko Priyambodo",
+      },
+    ],
+  },
   music: {
     enabled: true,
     labelPlay: "Putar Musik",
     labelPause: "Jeda Musik",
     defaultVolume: 0.24,
-    source: "Yann Tiersen - Comptine d'un autre été (Amélie)  Relaxing Piano Music.mp3",
+    source: "Lover - Taylor Swift - Wedding Violin Performance.mp3",
   },
 };
 
@@ -112,6 +128,8 @@ const elements = {
   receptionTime: document.getElementById("receptionTime"),
   receptionVenue: document.getElementById("receptionVenue"),
   galleryGrid: document.getElementById("galleryGrid"),
+  giftIntro: document.getElementById("giftIntro"),
+  giftGrid: document.getElementById("giftGrid"),
   venueAddress: document.getElementById("venueAddress"),
   mapsFrame: document.getElementById("mapsFrame"),
   mapsLink: document.getElementById("mapsLink"),
@@ -281,6 +299,24 @@ function renderGallery() {
     .join("");
 }
 
+function renderGiftAccounts() {
+  setText(elements.giftIntro, invitationData.gift.intro);
+  elements.giftGrid.innerHTML = invitationData.gift.accounts
+    .map(
+      (item, index) => `
+        <article class="gift-card reveal">
+          <p class="gift-bank">${item.bank}</p>
+          <h3 class="gift-number">${item.number}</h3>
+          <p class="gift-name">a.n. ${item.name}</p>
+          <button class="primary-button copy-button" type="button" data-copy-index="${index}">
+            Salin Nomor Rekening
+          </button>
+        </article>
+      `
+    )
+    .join("");
+}
+
 function getStoredRsvp() {
   try {
     return JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -346,6 +382,31 @@ function handleRsvpSubmit(event) {
   elements.rsvpForm.reset();
   elements.formFeedback.textContent = "RSVP tersimpan di browser ini. Ganti mekanisme submit saat data final siap.";
   renderRsvpList();
+}
+
+async function handleCopyButtonClick(event) {
+  const button = event.target.closest("[data-copy-index]");
+  if (!button) {
+    return;
+  }
+
+  const index = Number(button.dataset.copyIndex);
+  const account = invitationData.gift.accounts[index];
+  if (!account) {
+    return;
+  }
+
+  const originalLabel = button.textContent;
+  try {
+    await navigator.clipboard.writeText(account.number);
+    button.textContent = "Nomor Tersalin";
+  } catch {
+    button.textContent = account.number;
+  }
+
+  window.setTimeout(() => {
+    button.textContent = originalLabel;
+  }, 1600);
 }
 
 async function toggleMusic(forcePlay = false) {
@@ -427,10 +488,12 @@ function init() {
   personalizeGuest();
   renderStory();
   renderGallery();
+  renderGiftAccounts();
   renderRsvpList();
   applyVolumeLevel();
   setupReveal();
   elements.rsvpForm.addEventListener("submit", handleRsvpSubmit);
+  elements.giftGrid.addEventListener("click", handleCopyButtonClick);
   elements.openInvitation.addEventListener("click", openInvitation);
   elements.musicToggle.addEventListener("click", () => {
     toggleMusic().catch(() => {

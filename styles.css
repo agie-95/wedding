@@ -370,6 +370,7 @@ a {
 .story-grid,
 .gallery-grid,
 .event-grid,
+.gift-grid,
 .rsvp-layout {
   display: grid;
   gap: 0.9rem;
@@ -412,6 +413,48 @@ a {
 .event-card {
   padding: 1.2rem;
   text-align: center;
+}
+
+.gift-grid {
+  grid-template-columns: 1fr;
+}
+
+.gift-card {
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.gift-bank {
+  margin: 0;
+  color: var(--accent-deep);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gift-number {
+  margin: 0.6rem 0 0.45rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.55rem, 5vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.gift-name {
+  margin: 0 0 0.9rem;
+  color: var(--muted);
+}
+
+.copy-button {
+  width: 100%;
 }
 
 .gallery-grid {
