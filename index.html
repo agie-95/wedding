@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="description"
+    content="Undangan pernikahan online dengan desain elegan modern, RSVP, maps, dan musik latar."
+  >
+  <title>Undangan Pernikahan Connie Wahyu Wijayanti & Agi Yoko Priyambodo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <section class="intro-overlay" id="introOverlay" aria-label="Pembuka undangan">
+      <div class="intro-card reveal">
+        <p class="eyebrow">The Wedding Of</p>
+        <h1 id="heroNames">Connie Wahyu Wijayanti &amp; Agi Yoko Priyambodo</h1>
+        <p class="intro-date" id="heroDate">Minggu, 12 Oktober 2026</p>
+        <div class="guest-pill">
+          <span>Kepada Yth.</span>
+          <strong id="guestName">Tamu Undangan</strong>
+        </div>
+        <p class="intro-note">Mohon maaf apabila ada kesalahan penulisan nama dan gelar.</p>
+        <button class="primary-button" id="openInvitation" type="button">Buka Undangan</button>
+      </div>
+    </section>
+
+    <header class="hero section">
+      <div class="hero-backdrop"></div>
+      <div class="hero-content reveal">
+        <p class="eyebrow">Undangan Pernikahan</p>
+        <h1 class="hero-title" id="coupleNames">Connie Wahyu Wijayanti &amp; Agi Yoko Priyambodo</h1>
+        <p class="hero-copy" id="heroMessage">
+          Dengan penuh rasa syukur, kami mengundang Anda untuk hadir pada hari bahagia kami.
+        </p>
+        <div class="hero-meta">
+          <div>
+            <span class="meta-label">Tanggal</span>
+            <strong id="eventDateLong">Minggu, 12 Oktober 2026</strong>
+          </div>
+          <div>
+            <span class="meta-label">Lokasi</span>
+            <strong id="eventVenueShort">Grand Ambarukmo, Yogyakarta</strong>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a class="primary-button" href="#rsvp">Konfirmasi Kehadiran</a>
+          <button class="ghost-button" id="musicToggle" type="button" aria-pressed="false">
+            Putar Musik
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="section couple-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+          <h2>Merangkai Kisah Menjadi Ibadah</h2>
+          <p id="openingQuote">
+            "Dan di antara tanda-tanda kekuasaan-Nya diciptakan-Nya untukmu pasangan hidup supaya kamu
+            cenderung dan merasa tenteram kepadanya."
+          </p>
+          <p class="quote-source" id="quoteSource">QS. Ar-Rum: 21</p>
+        </div>
+        <div class="couple-grid">
+          <article class="couple-feature reveal" id="coupleFeature">
+            <div class="couple-photo" id="couplePhoto" aria-hidden="true"></div>
+            <div class="couple-summary">
+              <p class="card-label" id="coupleSummaryLabel">Connie &amp; Agi</p>
+              <h3 id="coupleFeatureNames">12 Oktober 2026</h3>
+            </div>
+          </article>
+          <div class="family-grid">
+            <article class="person-card reveal">
+              <h3 id="brideName">Connie Wahyu Wijayanti</h3>
+              <p id="brideParents">Putri pertama dari Bapak Basuki &amp; Ibu Widya</p>
+            </article>
+            <article class="person-card reveal">
+              <h3 id="groomName">Agi Yoko Priyambodo</h3>
+              <p id="groomParents">Putra kedua dari Bapak Supriyana &amp; Ibu Dwi Yani</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section story-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Our Story</p>
+          <h2>Perjalanan Singkat Kami</h2>
+        </div>
+        <div class="story-grid" id="storyList"></div>
+      </section>
+
+      <section class="section event-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Save The Date</p>
+          <h2>Detail Acara</h2>
+        </div>
+        <div class="event-grid">
+          <article class="event-card reveal">
+            <p class="card-label">Akad Nikah</p>
+            <h3 id="akadDate">Minggu, 12 Oktober 2026</h3>
+            <p id="akadTime">08.00 WIB - selesai</p>
+            <p id="akadVenue">Ballroom Grand Ambarukmo, Yogyakarta</p>
+          </article>
+          <article class="event-card reveal">
+            <p class="card-label">Resepsi</p>
+            <h3 id="receptionDate">Minggu, 12 Oktober 2026</h3>
+            <p id="receptionTime">11.00 WIB - 14.00 WIB</p>
+            <p id="receptionVenue">Ballroom Grand Ambarukmo, Yogyakarta</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section gallery-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Gallery</p>
+          <h2>Potret Bahagia</h2>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </section>
+
+      <section class="section location-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Location</p>
+          <h2>Lokasi Acara</h2>
+          <p id="venueAddress">Jl. Laksda Adisucipto No.80, Sleman, Daerah Istimewa Yogyakarta</p>
+        </div>
+        <div class="location-card reveal">
+          <iframe
+            id="mapsFrame"
+            title="Peta lokasi acara"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <div class="location-actions">
+            <a class="primary-button" id="mapsLink" href="#" target="_blank" rel="noreferrer">
+              Buka Google Maps
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section rsvp-section" id="rsvp">
+        <div class="section-heading reveal">
+          <p class="eyebrow">RSVP</p>
+          <h2>Konfirmasi Kehadiran</h2>
+          <p>Silakan isi form berikut. Pada versi demo ini, data RSVP disimpan di browser lokal.</p>
+        </div>
+        <div class="rsvp-layout">
+          <form class="rsvp-form reveal" id="rsvpForm" novalidate>
+            <label>
+              <span>Nama</span>
+              <input id="attendanceName" name="name" type="text" placeholder="Nama lengkap" required>
+            </label>
+            <label>
+              <span>Status Kehadiran</span>
+              <select id="attendanceStatus" name="status" required>
+                <option value="">Pilih status</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Tidak Hadir">Tidak Hadir</option>
+              </select>
+            </label>
+            <label>
+              <span>Jumlah Tamu</span>
+              <input
+                id="attendanceCount"
+                name="count"
+                type="number"
+                min="1"
+                max="10"
+                placeholder="1"
+                required
+              >
+            </label>
+            <label>
+              <span>Ucapan dan Doa</span>
+              <textarea
+                id="attendanceMessage"
+                name="message"
+                rows="4"
+                placeholder="Tulis ucapan terbaik untuk kedua mempelai"
+              ></textarea>
+            </label>
+            <button class="primary-button" type="submit">Kirim RSVP</button>
+            <p class="form-feedback" id="formFeedback" role="status" aria-live="polite"></p>
+          </form>
+
+          <aside class="wish-panel reveal">
+            <div class="wish-summary">
+              <p class="card-label">Ringkasan RSVP Lokal</p>
+              <h3 id="rsvpSummaryTitle">Belum ada konfirmasi</h3>
+              <p id="rsvpSummaryCount">0 tamu tercatat di browser ini.</p>
+            </div>
+            <div class="wish-list" id="wishList"></div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section closing-section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Terima Kasih</p>
+          <h2 id="closingTitle">Merupakan suatu kehormatan dan kebahagiaan bagi kami</h2>
+          <p id="closingMessage">
+            Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.
+          </p>
+          <p class="closing-signature" id="closingSignature">Aulia &amp; Reza</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="volume-float" id="volumeFloat">
+      <button
+        class="volume-float-button"
+        id="volumeFloatButton"
+        type="button"
+        aria-label="Buka kontrol volume musik"
+        aria-expanded="false"
+      >
+        <span class="volume-float-icon" id="volumeFloatIcon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="presentation">
+            <path
+              id="volumeIconPath"
+              d="M10 7.5L7.7 9.8H5.5V14.2H7.7L10 16.5V7.5Z"
+              fill="currentColor"
+            />
+            <path
+              id="volumeWaveSmall"
+              d="M13.4 10.2C14.15 10.95 14.15 13.05 13.4 13.8"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.8"
+            />
+            <path
+              id="volumeWaveLarge"
+              d="M15.8 8.4C17.7 10.3 17.7 13.7 15.8 15.6"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.8"
+            />
+            <path
+              id="volumeMuteLine"
+              d="M15.4 8.6L19 15.4"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.8"
+              hidden
+            />
+          </svg>
+        </span>
+      </button>
+      <div class="volume-float-panel" id="volumeFloatPanel" hidden>
+        <input
+          class="volume-slider"
+          id="volumeSlider"
+          type="range"
+          min="0"
+          max="100"
+          step="1"
+          value="22"
+          aria-label="Geser volume musik"
+        >
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
