@@ -60,7 +60,7 @@ const invitationData = {
   gallery: [
     {
       title: "Warm Morning",
-      image: "assets/images/Edit-2907.jpg",
+      image: "assets/images/Edit-4479.jpg",
     },
     {
       title: "Golden Promise",
