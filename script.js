@@ -23,6 +23,7 @@ const invitationData = {
   },
   event: {
     displayDate: "Minggu, 12 Oktober 2026",
+    dateTime: "2026-10-12T08:00:00+07:00",
     venueShort: "Grand Ambarukmo, Yogyakarta",
     address: "Jl. Laksda Adisucipto No.80, Sleman, Daerah Istimewa Yogyakarta",
     akad: {
@@ -38,6 +39,7 @@ const invitationData = {
     mapsEmbed:
       "https://www.google.com/maps?q=Grand%20Ambarrukmo%20Yogyakarta&z=15&output=embed",
     mapsLink: "https://maps.google.com/?q=Grand%20Ambarrukmo%20Yogyakarta",
+    whatsappNumber: "6281234567890",
   },
   story: [
     {
@@ -95,7 +97,7 @@ const invitationData = {
     labelPlay: "Putar Musik",
     labelPause: "Jeda Musik",
     defaultVolume: 0.24,
-    source: "Lover - Taylor Swift - Wedding Violin Performance.mp3",
+    source: "Yann Tiersen - Comptine d'un autre été (Amélie)  Relaxing Piano Music.mp3",
   },
 };
 
@@ -133,6 +135,12 @@ const elements = {
   venueAddress: document.getElementById("venueAddress"),
   mapsFrame: document.getElementById("mapsFrame"),
   mapsLink: document.getElementById("mapsLink"),
+  akadMapsLink: document.getElementById("akadMapsLink"),
+  receptionMapsLink: document.getElementById("receptionMapsLink"),
+  countdownDays: document.getElementById("countdownDays"),
+  countdownHours: document.getElementById("countdownHours"),
+  countdownMinutes: document.getElementById("countdownMinutes"),
+  countdownSeconds: document.getElementById("countdownSeconds"),
   musicToggle: document.getElementById("musicToggle"),
   volumeFloat: document.getElementById("volumeFloat"),
   volumeFloatButton: document.getElementById("volumeFloatButton"),
@@ -144,6 +152,7 @@ const elements = {
   volumeSlider: document.getElementById("volumeSlider"),
   rsvpForm: document.getElementById("rsvpForm"),
   formFeedback: document.getElementById("formFeedback"),
+  whatsappRsvpButton: document.getElementById("whatsappRsvpButton"),
   wishList: document.getElementById("wishList"),
   rsvpSummaryTitle: document.getElementById("rsvpSummaryTitle"),
   rsvpSummaryCount: document.getElementById("rsvpSummaryCount"),
@@ -261,6 +270,8 @@ function populateContent() {
   setText(elements.closingSignature, invitationData.couple.summaryNames);
   elements.mapsFrame.src = invitationData.event.mapsEmbed;
   elements.mapsLink.href = invitationData.event.mapsLink;
+  elements.akadMapsLink.href = invitationData.event.mapsLink;
+  elements.receptionMapsLink.href = invitationData.event.mapsLink;
 }
 
 function personalizeGuest() {
@@ -288,10 +299,8 @@ function renderGallery() {
   elements.galleryGrid.innerHTML = invitationData.gallery
     .map(
       (item) => `
-        <figure
-          class="gallery-card reveal"
-          style="background-image:linear-gradient(180deg, transparent, rgba(38, 24, 17, 0.32)), url('${resolveAssetPath(item.image)}')"
-        >
+        <figure class="gallery-card reveal">
+          <img src="${resolveAssetPath(item.image)}" alt="${item.title}" loading="lazy">
           <figcaption>${item.title}</figcaption>
         </figure>
       `
@@ -355,6 +364,53 @@ function renderRsvpList() {
       `
     )
     .join("");
+}
+
+function updateCountdown() {
+  const targetDate = new Date(invitationData.event.dateTime);
+  const remaining = targetDate.getTime() - Date.now();
+  const safeRemaining = Math.max(remaining, 0);
+  const days = Math.floor(safeRemaining / 86400000);
+  const hours = Math.floor((safeRemaining % 86400000) / 3600000);
+  const minutes = Math.floor((safeRemaining % 3600000) / 60000);
+  const seconds = Math.floor((safeRemaining % 60000) / 1000);
+  const pad = (value) => String(value).padStart(2, "0");
+
+  elements.countdownDays.textContent = pad(days);
+  elements.countdownHours.textContent = pad(hours);
+  elements.countdownMinutes.textContent = pad(minutes);
+  elements.countdownSeconds.textContent = pad(seconds);
+}
+
+function buildRsvpMessage() {
+  const formData = new FormData(elements.rsvpForm);
+  const name = String(formData.get("name") || "").trim();
+  const status = String(formData.get("status") || "").trim();
+  const count = String(formData.get("count") || "").trim();
+  const message = String(formData.get("message") || "").trim() || "-";
+
+  if (!name || !status || !count) {
+    elements.formFeedback.textContent = "Lengkapi nama, status, dan jumlah tamu sebelum kirim WhatsApp.";
+    return "";
+  }
+
+  return [
+    "Halo Connie & Agi, saya ingin konfirmasi RSVP:",
+    `Nama: ${name}`,
+    `Status: ${status}`,
+    `Jumlah tamu: ${count}`,
+    `Ucapan: ${message}`,
+  ].join("\n");
+}
+
+function handleWhatsappRsvp() {
+  const message = buildRsvpMessage();
+  if (!message) {
+    return;
+  }
+
+  const url = `https://wa.me/${invitationData.event.whatsappNumber}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 function handleRsvpSubmit(event) {
@@ -490,9 +546,12 @@ function init() {
   renderGallery();
   renderGiftAccounts();
   renderRsvpList();
+  updateCountdown();
+  window.setInterval(updateCountdown, 1000);
   applyVolumeLevel();
   setupReveal();
   elements.rsvpForm.addEventListener("submit", handleRsvpSubmit);
+  elements.whatsappRsvpButton.addEventListener("click", handleWhatsappRsvp);
   elements.giftGrid.addEventListener("click", handleCopyButtonClick);
   elements.openInvitation.addEventListener("click", openInvitation);
   elements.musicToggle.addEventListener("click", () => {

@@ -7,6 +7,14 @@
     name="description"
     content="Undangan pernikahan online dengan desain elegan modern, RSVP, maps, dan musik latar."
   >
+  <meta property="og:title" content="Undangan Pernikahan Connie &amp; Agi - 12 Oktober 2026">
+  <meta property="og:description" content="Dengan penuh rasa syukur, kami mengundang Anda hadir di hari bahagia kami. RSVP, Google Maps, dan info acara lengkap.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://connie-agi.pages.dev">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1a1a2e">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>%F0%9F%92%8D</text></svg>">
+  <link rel="manifest" href="/manifest.json">
   <title>Undangan Pernikahan Connie Wahyu Wijayanti & Agi Yoko Priyambodo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,13 +118,25 @@
             <h3 id="akadDate">Minggu, 12 Oktober 2026</h3>
             <p id="akadTime">08.00 WIB - selesai</p>
             <p id="akadVenue">Ballroom Grand Ambarukmo, Yogyakarta</p>
+            <a class="text-link event-map-link" id="akadMapsLink" href="#" target="_blank" rel="noreferrer">Lihat lokasi akad</a>
           </article>
           <article class="event-card reveal">
             <p class="card-label">Resepsi</p>
             <h3 id="receptionDate">Minggu, 12 Oktober 2026</h3>
             <p id="receptionTime">11.00 WIB - 14.00 WIB</p>
             <p id="receptionVenue">Ballroom Grand Ambarukmo, Yogyakarta</p>
+            <a class="text-link event-map-link" id="receptionMapsLink" href="#" target="_blank" rel="noreferrer">Lihat lokasi resepsi</a>
           </article>
+        </div>
+
+        <div class="countdown-card reveal" aria-live="polite">
+          <p class="card-label">Menuju Hari Bahagia</p>
+          <div class="countdown-grid" id="countdownTimer">
+            <span><strong id="countdownDays">00</strong>Hari</span>
+            <span><strong id="countdownHours">00</strong>Jam</span>
+            <span><strong id="countdownMinutes">00</strong>Menit</span>
+            <span><strong id="countdownSeconds">00</strong>Detik</span>
+          </div>
         </div>
       </section>
 
@@ -202,6 +222,7 @@
               ></textarea>
             </label>
             <button class="primary-button" type="submit">Kirim RSVP</button>
+            <button class="ghost-button" id="whatsappRsvpButton" type="button">Kirim via WhatsApp</button>
             <p class="form-feedback" id="formFeedback" role="status" aria-live="polite"></p>
           </form>
 
