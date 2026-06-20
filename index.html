@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -221,9 +221,7 @@
                 placeholder="Tulis ucapan terbaik untuk kedua mempelai"
               ></textarea>
             </label>
-            <button class="primary-button" type="submit">Kirim RSVP</button>
-            <button class="ghost-button" id="whatsappRsvpButton" type="button">Kirim via WhatsApp</button>
-            <p class="form-feedback" id="formFeedback" role="status" aria-live="polite"></p>
+            <button class="primary-button" id="submitRsvpButton" type="button">Kirim RSVP</button>
           </form>
 
           <aside class="wish-panel reveal">
@@ -306,6 +304,14 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="rsvpModal" aria-hidden="true" hidden>
+    <div class="modal-card" role="alertdialog" aria-labelledby="modalTitle">
+      <div class="modal-icon" id="modalIcon">âœ“</div>
+      <h3 class="modal-title" id="modalTitle">Terima Kasih</h3>
+      <p class="modal-message" id="modalMessage">Konfirmasi kehadiran Anda sudah kami terima.</p>
+      <button class="primary-button modal-close" id="modalClose" type="button">Tutup</button>
+    </div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

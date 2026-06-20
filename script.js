@@ -1,4 +1,4 @@
-const invitationData = {
+﻿const invitationData = {
   seoTitle: "Undangan Pernikahan Connie Wahyu Wijayanti & Agi Yoko Priyambodo",
   heroMessage: "Dengan penuh rasa syukur, kami mengundang Anda untuk hadir pada hari bahagia kami.",
   quote:
@@ -7,6 +7,7 @@ const invitationData = {
   closingTitle: "Merupakan suatu kehormatan dan kebahagiaan bagi kami",
   closingMessage:
     "Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami mengucapkan terima kasih.",
+  gsheetsUrl: "https://script.google.com/macros/s/AKfycby1cVuABDNb4T8VRczJLTWnsS3Li-N3AZ-zOgYgl-7VFbu3giCa3DBLEjL-0m1B3MHJ/exec",
   couple: {
     shortNames: "Connie Wahyu Wijayanti & Agi Yoko Priyambodo",
     summaryNames: "Connie & Agi",
@@ -97,7 +98,7 @@ const invitationData = {
     labelPlay: "Putar Musik",
     labelPause: "Jeda Musik",
     defaultVolume: 0.24,
-    source: "Yann Tiersen - Comptine d'un autre été (Amélie)  Relaxing Piano Music.mp3",
+    source: "Yann Tiersen - Comptine d'un autre Ã©tÃ© (AmÃ©lie)  Relaxing Piano Music.mp3",
   },
 };
 
@@ -151,8 +152,12 @@ const elements = {
   volumeFloatPanel: document.getElementById("volumeFloatPanel"),
   volumeSlider: document.getElementById("volumeSlider"),
   rsvpForm: document.getElementById("rsvpForm"),
-  formFeedback: document.getElementById("formFeedback"),
-  whatsappRsvpButton: document.getElementById("whatsappRsvpButton"),
+  submitRsvpButton: document.getElementById("submitRsvpButton"),
+  modalOverlay: document.getElementById("rsvpModal"),
+  modalIcon: document.getElementById("modalIcon"),
+  modalTitle: document.getElementById("modalTitle"),
+  modalMessage: document.getElementById("modalMessage"),
+  modalClose: document.getElementById("modalClose"),
   wishList: document.getElementById("wishList"),
   rsvpSummaryTitle: document.getElementById("rsvpSummaryTitle"),
   rsvpSummaryCount: document.getElementById("rsvpSummaryCount"),
@@ -338,32 +343,82 @@ function saveStoredRsvp(entries) {
   localStorage.setItem(storageKey, JSON.stringify(entries));
 }
 
-function renderRsvpList() {
-  const entries = getStoredRsvp();
+function isGsheetsEnabled() {
+  return Boolean(invitationData.gsheetsUrl && invitationData.gsheetsUrl.startsWith("https://"));
+}
+
+async function fetchRsvpEntries() {
+  if (!isGsheetsEnabled()) {
+    return getStoredRsvp();
+  }
+
+  const response = await fetch(invitationData.gsheetsUrl, { method: "GET" });
+  if (!response.ok) {
+    throw new Error("Gagal membaca RSVP dari Google Sheets");
+  }
+  return response.json();
+}
+
+async function submitRsvpEntry(entry) {
+  if (!isGsheetsEnabled()) {
+    const entries = getStoredRsvp();
+    entries.push(entry);
+    saveStoredRsvp(entries);
+    return "local";
+  }
+
+  const response = await fetch(invitationData.gsheetsUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8",
+    },
+    body: JSON.stringify(entry),
+  });
+  if (!response.ok) {
+    throw new Error("Gagal menyimpan RSVP ke Google Sheets");
+  }
+  return "gsheets";
+}
+
+function renderRsvpEntries(entries, sourceLabel) {
   if (!entries.length) {
     elements.rsvpSummaryTitle.textContent = "Belum ada konfirmasi";
-    elements.rsvpSummaryCount.textContent = "0 tamu tercatat di browser ini.";
+    elements.rsvpSummaryCount.textContent = sourceLabel;
     elements.wishList.innerHTML =
-      '<div class="wish-item"><strong>Belum ada data</strong><p>Isi form RSVP untuk melihat hasil demo tersimpan di browser.</p></div>';
+      '<div class="wish-item"><strong>Belum ada data</strong><p>Isi form RSVP untuk melihat hasil konfirmasi.</p></div>';
     return;
   }
 
-  const totalGuests = entries.reduce((sum, item) => sum + item.count, 0);
+  const totalGuests = entries.reduce((sum, item) => sum + Number(item.count || 0), 0);
   elements.rsvpSummaryTitle.textContent = `${entries.length} konfirmasi tersimpan`;
-  elements.rsvpSummaryCount.textContent = `${totalGuests} tamu tercatat di browser ini.`;
+  elements.rsvpSummaryCount.textContent = `${totalGuests} tamu tercatat. ${sourceLabel}`;
   elements.wishList.innerHTML = entries
     .slice()
     .reverse()
     .map(
       (item) => `
         <div class="wish-item">
-          <strong>${item.name} • ${item.status}</strong>
+          <strong>${item.name} ? ${item.status}</strong>
           <span>${item.count} tamu</span>
           <p>${item.message || "Tanpa pesan tambahan."}</p>
         </div>
       `
     )
     .join("");
+}
+
+async function renderRsvpList() {
+  const sourceLabel = isGsheetsEnabled()
+    ? "Data dibaca dari Google Sheets."
+    : "Data demo disimpan di browser ini.";
+
+  try {
+    const entries = await fetchRsvpEntries();
+    renderRsvpEntries(entries, sourceLabel);
+  } catch {
+    const localEntries = getStoredRsvp();
+    renderRsvpEntries(localEntries, "Gagal membaca Google Sheets, menampilkan data browser.");
+  }
 }
 
 function updateCountdown() {
@@ -382,38 +437,23 @@ function updateCountdown() {
   elements.countdownSeconds.textContent = pad(seconds);
 }
 
-function buildRsvpMessage() {
-  const formData = new FormData(elements.rsvpForm);
-  const name = String(formData.get("name") || "").trim();
-  const status = String(formData.get("status") || "").trim();
-  const count = String(formData.get("count") || "").trim();
-  const message = String(formData.get("message") || "").trim() || "-";
-
-  if (!name || !status || !count) {
-    elements.formFeedback.textContent = "Lengkapi nama, status, dan jumlah tamu sebelum kirim WhatsApp.";
-    return "";
-  }
-
-  return [
-    "Halo Connie & Agi, saya ingin konfirmasi RSVP:",
-    `Nama: ${name}`,
-    `Status: ${status}`,
-    `Jumlah tamu: ${count}`,
-    `Ucapan: ${message}`,
-  ].join("\n");
+function showRsvpModal(icon, title, message) {
+  elements.modalIcon.textContent = icon;
+  elements.modalTitle.textContent = title;
+  elements.modalMessage.textContent = message;
+  elements.modalOverlay.hidden = false;
+  elements.modalOverlay.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
 }
 
-function handleWhatsappRsvp() {
-  const message = buildRsvpMessage();
-  if (!message) {
-    return;
-  }
-
-  const url = `https://wa.me/${invitationData.event.whatsappNumber}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+function hideRsvpModal() {
+  elements.modalOverlay.hidden = true;
+  elements.modalOverlay.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
 }
 
-function handleRsvpSubmit(event) {
+async function handleRsvpSubmit(event) {
+
   event.preventDefault();
   const formData = new FormData(elements.rsvpForm);
   const name = String(formData.get("name") || "").trim();
@@ -422,22 +462,36 @@ function handleRsvpSubmit(event) {
   const message = String(formData.get("message") || "").trim();
 
   if (!name || !status || !Number.isFinite(count) || count < 1) {
-    elements.formFeedback.textContent = "Lengkapi nama, status kehadiran, dan jumlah tamu yang valid.";
+    showRsvpModal("!", "Data Belum Lengkap", "Mohon lengkapi nama, status kehadiran, dan jumlah tamu terlebih dahulu.");
     return;
   }
 
-  const entries = getStoredRsvp();
-  entries.push({
+  const entry = {
     name,
     status,
     count,
     message,
     submittedAt: new Date().toISOString(),
-  });
-  saveStoredRsvp(entries);
-  elements.rsvpForm.reset();
-  elements.formFeedback.textContent = "RSVP tersimpan di browser ini. Ganti mekanisme submit saat data final siap.";
-  renderRsvpList();
+  };
+
+  showRsvpModal("…", "Mohon Tunggu", "Konfirmasi kehadiran Anda sedang dikirim.");
+
+  try {
+    const source = await submitRsvpEntry(entry);
+    elements.rsvpForm.reset();
+    if (source === "gsheets") {
+      showRsvpModal("✓", "Terima Kasih", "Konfirmasi kehadiran Anda sudah kami terima. Sampai jumpa di hari bahagia kami!");
+    } else {
+      showRsvpModal("✓", "Terima Kasih", "Konfirmasi kehadiran Anda sudah tersimpan.");
+    }
+    await renderRsvpList();
+  } catch {
+    const entries = getStoredRsvp();
+    entries.push(entry);
+    saveStoredRsvp(entries);
+    showRsvpModal("!", "Belum Terkirim", "Maaf, konfirmasi belum terkirim ke server. Data disimpan sementara di browser, silakan coba lagi nanti.");
+    await renderRsvpList();
+  }
 }
 
 async function handleCopyButtonClick(event) {
@@ -551,9 +605,13 @@ function init() {
   applyVolumeLevel();
   setupReveal();
   elements.rsvpForm.addEventListener("submit", handleRsvpSubmit);
-  elements.whatsappRsvpButton.addEventListener("click", handleWhatsappRsvp);
+  elements.submitRsvpButton.addEventListener("click", handleRsvpSubmit);
   elements.giftGrid.addEventListener("click", handleCopyButtonClick);
   elements.openInvitation.addEventListener("click", openInvitation);
+  elements.modalClose.addEventListener("click", hideRsvpModal);
+  elements.modalOverlay.addEventListener("click", function (e) {
+    if (e.target === elements.modalOverlay) hideRsvpModal();
+  });
   elements.musicToggle.addEventListener("click", () => {
     toggleMusic().catch(() => {
       elements.musicToggle.textContent = "Audio gagal diputar";
