@@ -98,7 +98,7 @@
     labelPlay: "Putar Musik",
     labelPause: "Jeda Musik",
     defaultVolume: 0.24,
-    source: "Yann Tiersen - Comptine d'un autre Ã©tÃ© (AmÃ©lie)  Relaxing Piano Music.mp3",
+    source: "Yann Tiersen - Comptine d'un autre été (Amélie)  Relaxing Piano Music.mp3",
   },
 };
 
